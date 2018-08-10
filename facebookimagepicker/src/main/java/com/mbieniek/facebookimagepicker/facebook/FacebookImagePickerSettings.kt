@@ -10,6 +10,7 @@ object FacebookImagePickerSettings {
     var imagesSelectedText : String = "Select (%d)"
     var maximumImagesSelectedText : String = "You\'ve reached the maximum limit of photos that can be selected!"
     var placeholderDrawableColor : String = "#000000"
+    val debugging : Boolean = false
 
     val picassoAvailable = picassoCheck()
     val glideAvailable = glideCheck()

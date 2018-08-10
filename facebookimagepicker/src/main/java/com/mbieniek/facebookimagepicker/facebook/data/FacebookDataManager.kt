@@ -1,11 +1,14 @@
 package com.mbieniek.facebookimagepicker.facebook.data
 
 import android.os.Bundle
+import android.util.Log
 import com.facebook.AccessToken
 import com.facebook.GraphRequest
 import com.facebook.GraphResponse
 import com.facebook.HttpMethod
+import com.mbieniek.facebookimagepicker.facebook.FacebookImagePickerSettings
 import com.mbieniek.facebookimagepicker.facebook.models.FacebookAlbum
+import com.mbieniek.facebookimagepicker.facebook.models.FacebookImage
 import com.mbieniek.facebookimagepicker.facebook.models.FacebookPicture
 import io.reactivex.Observable
 import org.json.JSONObject
@@ -19,7 +22,7 @@ const val GRAPH_PATH_ALBUMS = "me/albums"
 const val GRAPH_PATH_PHOTOS = "/%d/photos"
 const val GRAPH_REQUEST_FIELDS = "fields"
 const val GRAPH_REQUEST_FIELD_SEPARATOR = ","
-const val FACEBOOK_PICTURE_URL = "https://graph.facebook.com/%d/picture?type=small&access_token=%s"
+const val FACEBOOK_PICTURE_URL = "https://graph.facebook.com/v3.1/%d/picture?type=small&access_token=%s"
 const val RESPONSE_JSON_NAME_DATA = "data"
 const val RESPONSE_JSON_ALBUM_ID = "id"
 const val RESPONSE_JSON_ALBUM_NAME = "name"
@@ -30,12 +33,17 @@ const val RESPONSE_JSON_PICTURE_PREVIEW = "picture"
 const val RESPONSE_JSON_PICTURE_SOURCE = "source"
 const val RESPONSE_JSON_IMAGES = "images"
 const val RESPONSE_JSON_PICTURE_ID = "id"
+const val RESPONSE_JSON_WIDTH = "width"
+const val RESPONSE_JSON_HEIGHT = "height"
 
 object FacebookDataManager {
 
     fun requestPictures(albumId: Long, accessToken: AccessToken): Observable<List<FacebookPicture>> {
         val graphRequest = createGraphRequest(accessToken, GRAPH_PATH_PHOTOS.format(albumId), RESPONSE_JSON_PICTURE_PREVIEW, RESPONSE_JSON_PICTURE_ID, RESPONSE_JSON_IMAGES)
         return request(graphRequest).flatMap { response: GraphResponse ->
+            if(FacebookImagePickerSettings.debugging) {
+                Log.v("FBImagePicker", "Response ${response.jsonObject}")
+            }
             Observable.just(convertJsonObjectToFacebookPictureList(response.jsonObject))
         }
     }
@@ -46,18 +54,31 @@ object FacebookDataManager {
         if (dataJSONArray != null) {
             for (index in 0 until dataJSONArray.length()) {
                 val item = dataJSONArray.getJSONObject(index)
-                val images = item.getJSONArray(RESPONSE_JSON_IMAGES)
-                val image = images.getJSONObject(0) //Obtain the largest possible image from the front of the array
-                pictureList.add(FacebookPicture(item.getString(RESPONSE_JSON_PICTURE_PREVIEW), image.getString(RESPONSE_JSON_PICTURE_SOURCE), item.getLong(RESPONSE_JSON_PICTURE_ID)))
+                val images = convertJsonObjectToImageList(item)
+                val image = images.last() //Obtain the largest possible image from the end of the array
+                pictureList.add(FacebookPicture(item.getString(RESPONSE_JSON_PICTURE_PREVIEW), image.source, item.getLong(RESPONSE_JSON_PICTURE_ID)))
             }
         }
         return pictureList
+    }
+
+    fun convertJsonObjectToImageList(dataJSON: JSONObject): List<FacebookImage> {
+        val imageList: ArrayList<FacebookImage> = ArrayList()
+        val images = dataJSON.getJSONArray(RESPONSE_JSON_IMAGES)
+        for(index in 0 until images.length()) {
+            val image = images.getJSONObject(index)
+            imageList.add(FacebookImage(source = image.getString(RESPONSE_JSON_PICTURE_SOURCE), width = image.getInt(RESPONSE_JSON_WIDTH), height = image.getInt(RESPONSE_JSON_HEIGHT)))
+        }
+        return imageList.sortedBy { it.width * it.height }
     }
 
     fun requestAlbums(accessToken: AccessToken): Observable<List<FacebookAlbum>> {
         val graphRequest = createGraphRequest(accessToken, GRAPH_PATH_ALBUMS, RESPONSE_JSON_ALBUM_ID, RESPONSE_JSON_ALBUM_NAME, RESPONSE_JSON_ALBUM_COUNT, RESPONSE_JSON_COVER_PHOTO)
 
         return request(graphRequest).flatMap { response: GraphResponse ->
+            if(FacebookImagePickerSettings.debugging) {
+                Log.v("FBImagePicker", "Response ${response.jsonObject}")
+            }
             Observable.just(convertJsonObjectToFacebookAlbumList(response.jsonObject))
         }
     }
