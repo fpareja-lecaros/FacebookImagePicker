@@ -48,7 +48,7 @@ object FacebookDataManager {
                 val item = dataJSONArray.getJSONObject(index)
                 val images = item.getJSONArray(RESPONSE_JSON_IMAGES)
                 val image = images.getJSONObject(0) //Obtain the largest possible image from the front of the array
-                pictureList.add(FacebookPicture(item.getString(RESPONSE_JSON_PICTURE_PREVIEW), image.getString(RESPONSE_JSON_PICTURE_SOURCE), item.getLong(RESPONSE_JSON_PICTURE_ID)))
+                pictureList.add(FacebookPicture(item.getString(RESPONSE_JSON_PICTURE_PREVIEW), image.getString(RESPONSE_JSON_PICTURE_SOURCE), item.getString(RESPONSE_JSON_PICTURE_ID)))
             }
         }
         return pictureList
@@ -70,7 +70,7 @@ object FacebookDataManager {
                 val item = dataJSONArray.getJSONObject(index)
                 if (item.has(RESPONSE_JSON_COVER_PHOTO)) {
                     val photo = item.getJSONObject(RESPONSE_JSON_COVER_PHOTO)
-                    albumList.add(FacebookAlbum(item.getLong(RESPONSE_JSON_ALBUM_ID), item.getString(RESPONSE_JSON_ALBUM_NAME), item.getInt(RESPONSE_JSON_ALBUM_COUNT), photo.getLong(RESPONSE_JSON_COVER_PHOTO_ID)))
+                    albumList.add(FacebookAlbum(item.getLong(RESPONSE_JSON_ALBUM_ID), item.getString(RESPONSE_JSON_ALBUM_NAME), item.getInt(RESPONSE_JSON_ALBUM_COUNT), photo.getString(RESPONSE_JSON_COVER_PHOTO_ID)))
                 } else {
                     albumList.add(FacebookAlbum(item.getLong(RESPONSE_JSON_ALBUM_ID), item.getString(RESPONSE_JSON_ALBUM_NAME), item.getInt(RESPONSE_JSON_ALBUM_COUNT), null))
                 }
