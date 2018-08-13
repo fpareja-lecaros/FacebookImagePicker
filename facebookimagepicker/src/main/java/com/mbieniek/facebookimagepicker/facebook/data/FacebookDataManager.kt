@@ -33,7 +33,7 @@ const val RESPONSE_JSON_PICTURE_ID = "id"
 
 object FacebookDataManager {
 
-    fun requestPictures(albumId: Long, accessToken: AccessToken): Observable<List<FacebookPicture>> {
+    fun requestPictures(albumId: String, accessToken: AccessToken): Observable<List<FacebookPicture>> {
         val graphRequest = createGraphRequest(accessToken, GRAPH_PATH_PHOTOS.format(albumId), RESPONSE_JSON_PICTURE_PREVIEW, RESPONSE_JSON_PICTURE_ID, RESPONSE_JSON_IMAGES)
         return request(graphRequest).flatMap { response: GraphResponse ->
             Observable.just(convertJsonObjectToFacebookPictureList(response.jsonObject))

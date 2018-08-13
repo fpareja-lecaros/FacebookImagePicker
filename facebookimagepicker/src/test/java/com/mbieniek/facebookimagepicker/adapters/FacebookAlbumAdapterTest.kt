@@ -44,8 +44,8 @@ class FacebookAlbumAdapterTest {
     @Test
     fun testAddAlbumList() {
         val facebookAlbumList = ArrayList<FacebookAlbum>()
-        facebookAlbumList.add(FacebookAlbum(123, "First Album", 12, 321))
-        facebookAlbumList.add(FacebookAlbum(456, "Second Album", 54, 654))
+        facebookAlbumList.add(FacebookAlbum("123", "First Album", 12, "321"))
+        facebookAlbumList.add(FacebookAlbum("456", "Second Album", 54, "654"))
 
         adapter.addAlbumList(facebookAlbumList)
 
@@ -59,8 +59,8 @@ class FacebookAlbumAdapterTest {
         val parent = FrameLayout(RuntimeEnvironment.application)
         val holder = adapter.onCreateViewHolder(parent, 0)
         val facebookAlbumList = ArrayList<FacebookAlbum>()
-        facebookAlbumList.add(FacebookAlbum(123, "First Album", 12, null))
-        facebookAlbumList.add(FacebookAlbum(456, "Second Album", 54, null))
+        facebookAlbumList.add(FacebookAlbum("123", "First Album", 12, null))
+        facebookAlbumList.add(FacebookAlbum("456", "Second Album", 54, null))
         adapter.addAlbumList(facebookAlbumList)
         adapter.onBindViewHolder(holder, 0)
 

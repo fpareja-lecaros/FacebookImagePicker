@@ -69,21 +69,22 @@ class FacebookAlbumPickerControllerTest {
     fun testLoadAlbums() {
         val accessToken = AccessToken("test", "test", "test", null, null, null, null, null)
         val resultList = ArrayList<FacebookAlbum>()
-        resultList.add(FacebookAlbum(1, "Album 1", 22, null))
-        resultList.add(FacebookAlbum(2, "Album 2", 33, null))
+        resultList.add(FacebookAlbum("1", "Album 1", 22, null))
+        resultList.add(FacebookAlbum("2", "Album 2", 33, null))
+        resultList.add(FacebookAlbum("13201010101010101", "Album 3", 2, null)) //17 Digit ID test
         controller.facebookDataManager = dataManagerMock
         Mockito.doReturn(accessToken).`when`(controller).getAccessToken()
         `when`(dataManagerMock.requestAlbums(accessToken)).thenReturn(Observable.just(resultList))
 
         controller.loadAlbums()
 
-        assertEquals(2, controller.facebookAlbumAdapter.itemCount)
+        assertEquals(3, controller.facebookAlbumAdapter.itemCount)
         assertEquals(resultList, controller.facebookAlbumAdapter.albumList)
     }
 
     @Test
     fun testLaunchImagePickerForAlbum() {
-        val album = FacebookAlbum(123, "Test Album", 34, null)
+        val album = FacebookAlbum("123", "Test Album", 34, null)
 
         controller.launchImagePickerForAlbum(album)
 
@@ -91,7 +92,7 @@ class FacebookAlbumPickerControllerTest {
         val startedIntent = shadowActivity.nextStartedActivityForResult
         assertNotNull(startedIntent)
         assertEquals(FacebookImagePickerActivity::class.java.name, startedIntent.intent.component.className)
-        assertEquals(123, startedIntent.intent.getLongExtra(FACEBOOK_ALBUM_ID_KEY, 0))
+        assertEquals("123", startedIntent.intent.getStringExtra(FACEBOOK_ALBUM_ID_KEY))
         assertEquals("Test Album", startedIntent.intent.getStringExtra(FACEBOOK_ALBUM_NAME_KEY))
     }
 }

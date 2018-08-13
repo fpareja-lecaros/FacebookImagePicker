@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Created by michaelbieniek on 3/24/18.
  */
-class FacebookImagePickerController(val albumId: Long, imageSelectedListener: FacebookImageAdapter.ImageSelectedListener) {
+class FacebookImagePickerController(val albumId: String, imageSelectedListener: FacebookImageAdapter.ImageSelectedListener) {
 
     var facebookImageAdapter : FacebookImageAdapter = FacebookImageAdapter(imageSelectedListener)
     lateinit var facebookImageRecyclerView: RecyclerView
