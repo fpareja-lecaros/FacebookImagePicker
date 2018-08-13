@@ -16,7 +16,7 @@ import kotlin.collections.ArrayList
  */
 
 const val GRAPH_PATH_ALBUMS = "me/albums"
-const val GRAPH_PATH_PHOTOS = "/%d/photos"
+const val GRAPH_PATH_PHOTOS = "/%s/photos"
 const val GRAPH_REQUEST_FIELDS = "fields"
 const val GRAPH_REQUEST_FIELD_SEPARATOR = ","
 const val FACEBOOK_PICTURE_URL = "https://graph.facebook.com/%s/picture?type=thumbnail&access_token=%s"
@@ -70,9 +70,9 @@ object FacebookDataManager {
                 val item = dataJSONArray.getJSONObject(index)
                 if (item.has(RESPONSE_JSON_COVER_PHOTO)) {
                     val photo = item.getJSONObject(RESPONSE_JSON_COVER_PHOTO)
-                    albumList.add(FacebookAlbum(item.getLong(RESPONSE_JSON_ALBUM_ID), item.getString(RESPONSE_JSON_ALBUM_NAME), item.getInt(RESPONSE_JSON_ALBUM_COUNT), photo.getString(RESPONSE_JSON_COVER_PHOTO_ID)))
+                    albumList.add(FacebookAlbum(item.getString(RESPONSE_JSON_ALBUM_ID), item.getString(RESPONSE_JSON_ALBUM_NAME), item.getInt(RESPONSE_JSON_ALBUM_COUNT), photo.getString(RESPONSE_JSON_COVER_PHOTO_ID)))
                 } else {
-                    albumList.add(FacebookAlbum(item.getLong(RESPONSE_JSON_ALBUM_ID), item.getString(RESPONSE_JSON_ALBUM_NAME), item.getInt(RESPONSE_JSON_ALBUM_COUNT), null))
+                    albumList.add(FacebookAlbum(item.getString(RESPONSE_JSON_ALBUM_ID), item.getString(RESPONSE_JSON_ALBUM_NAME), item.getInt(RESPONSE_JSON_ALBUM_COUNT), null))
                 }
             }
         }
