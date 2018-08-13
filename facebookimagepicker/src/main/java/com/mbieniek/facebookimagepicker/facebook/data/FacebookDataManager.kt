@@ -1,6 +1,7 @@
 package com.mbieniek.facebookimagepicker.facebook.data
 
 import android.os.Bundle
+import android.util.Log
 import com.facebook.AccessToken
 import com.facebook.GraphRequest
 import com.facebook.GraphResponse
@@ -36,6 +37,8 @@ object FacebookDataManager {
     fun requestPictures(albumId: Long, accessToken: AccessToken): Observable<List<FacebookPicture>> {
         val graphRequest = createGraphRequest(accessToken, GRAPH_PATH_PHOTOS.format(albumId), RESPONSE_JSON_PICTURE_PREVIEW, RESPONSE_JSON_PICTURE_ID, RESPONSE_JSON_IMAGES)
         return request(graphRequest).flatMap { response: GraphResponse ->
+            Log.v("Debugging", graphRequest.toString())
+            Log.v("Debugging", response.toString())
             Observable.just(convertJsonObjectToFacebookPictureList(response.jsonObject))
         }
     }
