@@ -64,7 +64,7 @@ class FacebookDataManagerTest {
 
     @Test
     fun testRequestAlbums() {
-        val accessToken = AccessToken("test", "test", "test", null, null, null, null, null)
+        val accessToken = AccessToken("test", "test", "test", null, null, null, null, null, null)
         val mockGraphRequest = mock(GraphRequest::class.java)
         val mockGraphResponse = mock(GraphResponse::class.java)
         `when`(facebookDataManager.createGraphRequest(accessToken, "me/albums", "id", "name", "count", "cover_photo")).thenReturn(mockGraphRequest)
@@ -102,7 +102,7 @@ class FacebookDataManagerTest {
 
     @Test
     fun testRequestPictures() {
-        val accessToken = AccessToken("test", "test", "test", null, null, null, null, null)
+        val accessToken = AccessToken("test", "test", "test", null, null, null, null, null, null)
         val mockGraphRequest = mock(GraphRequest::class.java)
         val mockGraphResponse = mock(GraphResponse::class.java)
         `when`(facebookDataManager.createGraphRequest(accessToken, "/123/photos", "picture", "id", "images")).thenReturn(mockGraphRequest)
