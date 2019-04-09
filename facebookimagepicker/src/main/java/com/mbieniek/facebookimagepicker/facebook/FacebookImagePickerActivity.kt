@@ -32,7 +32,7 @@ class FacebookImagePickerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_facebook_image_picker)
         title = intent.getStringExtra(FACEBOOK_ALBUM_NAME_KEY)
         controller = FacebookImagePickerController(
-                intent.getLongExtra(FACEBOOK_ALBUM_ID_KEY, -1),
+                intent.getStringExtra(FACEBOOK_ALBUM_ID_KEY),
                 object : FacebookImageAdapter.ImageSelectedListener {
                     override fun imageSelectedListUpdated(numberOfImagesSelected: Int) {
                         val menuItem = menu.findItem(R.id.menu_facebook_images_selected)

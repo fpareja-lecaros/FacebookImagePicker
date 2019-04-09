@@ -48,8 +48,8 @@ class FacebookImageAdapterTest {
     @Test
     fun testAddImageList() {
         val facebookPictureList = ArrayList<FacebookPicture>()
-        facebookPictureList.add(FacebookPicture("previewUrl", "sourceUrl", 123))
-        facebookPictureList.add(FacebookPicture("previewUrl2", "sourceUrl2", 456))
+        facebookPictureList.add(FacebookPicture("previewUrl", "sourceUrl", "123"))
+        facebookPictureList.add(FacebookPicture("previewUrl2", "sourceUrl2", "456"))
 
         adapter.addImageList(facebookPictureList)
 
@@ -63,8 +63,8 @@ class FacebookImageAdapterTest {
         val parent = FrameLayout(RuntimeEnvironment.application)
         val holder = adapter.onCreateViewHolder(parent, 0)
         val facebookPictureList = ArrayList<FacebookPicture>()
-        facebookPictureList.add(FacebookPicture("previewUrl", "sourceUrl", 123))
-        facebookPictureList.add(FacebookPicture("previewUrl2", "sourceUrl2", 456))
+        facebookPictureList.add(FacebookPicture("previewUrl", "sourceUrl", "123"))
+        facebookPictureList.add(FacebookPicture("previewUrl2", "sourceUrl2", "456"))
 
         adapter.addImageList(facebookPictureList)
         adapter.onBindViewHolder(holder, 0)
@@ -72,7 +72,7 @@ class FacebookImageAdapterTest {
 
         assertEquals(2, adapter.itemCount)
         assertEquals(1, adapter.selectedImageList.size)
-        assertEquals(123, adapter.selectedImageList[0].id)
+        assertEquals("123", adapter.selectedImageList[0].id)
         assertEquals(View.VISIBLE, holder.itemView.facebook_selected_check_image.visibility)
         assertEquals(1, imageSelectedListenerParam)
     }
@@ -82,8 +82,8 @@ class FacebookImageAdapterTest {
         val parent = FrameLayout(RuntimeEnvironment.application)
         val holder = adapter.onCreateViewHolder(parent, 0)
         val facebookPictureList = ArrayList<FacebookPicture>()
-        facebookPictureList.add(FacebookPicture("previewUrl", "sourceUrl", 123))
-        facebookPictureList.add(FacebookPicture("previewUrl2", "sourceUrl2", 456))
+        facebookPictureList.add(FacebookPicture("previewUrl", "sourceUrl", "123"))
+        facebookPictureList.add(FacebookPicture("previewUrl2", "sourceUrl2", "456"))
         adapter.addImageList(facebookPictureList)
         adapter.onBindViewHolder(holder, 0)
 
@@ -103,8 +103,8 @@ class FacebookImageAdapterTest {
         val holder1 = adapter.onCreateViewHolder(parent, 0)
         val holder2 = adapter.onCreateViewHolder(parent, 0)
         val facebookPictureList = ArrayList<FacebookPicture>()
-        facebookPictureList.add(FacebookPicture("previewUrl", "sourceUrl", 123))
-        facebookPictureList.add(FacebookPicture("previewUrl2", "sourceUrl2", 456))
+        facebookPictureList.add(FacebookPicture("previewUrl", "sourceUrl", "123"))
+        facebookPictureList.add(FacebookPicture("previewUrl2", "sourceUrl2", "456"))
         adapter.addImageList(facebookPictureList)
         adapter.onBindViewHolder(holder1, 0)
         adapter.onBindViewHolder(holder2, 1)
@@ -113,7 +113,7 @@ class FacebookImageAdapterTest {
         holder1.itemView.performClick()
 
         assertEquals(1, adapter.selectedImageList.size)
-        assertEquals(456, adapter.selectedImageList[0].id)
+        assertEquals("456", adapter.selectedImageList[0].id)
         assertEquals(View.INVISIBLE, holder1.itemView.facebook_selected_check_image.visibility)
         assertEquals(View.VISIBLE, holder2.itemView.facebook_selected_check_image.visibility)
         assertEquals(1, imageSelectedListenerParam)

@@ -20,6 +20,7 @@ import io.reactivex.schedulers.Schedulers
  */
 
 const val PERMISSION_USER_PHOTOS = "user_photos"
+const val PERMISSION_INSTAGRAM = "instagram_basic"
 
 class FacebookAlbumPickerController(val activity: Activity) {
 

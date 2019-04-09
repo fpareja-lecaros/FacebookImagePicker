@@ -42,7 +42,7 @@ class FacebookImagePickerControllerTest {
 
     @Before
     fun setUp() {
-        controller = spy(FacebookImagePickerController(123, object : FacebookImageAdapter.ImageSelectedListener {
+        controller = spy(FacebookImagePickerController("123", object : FacebookImageAdapter.ImageSelectedListener {
             override fun imageSelectedListUpdated(numberOfImagesSelected: Int) {
                 imageSelectedListenerParam = numberOfImagesSelected
             }
@@ -60,13 +60,13 @@ class FacebookImagePickerControllerTest {
 
     @Test
     fun testLoadPictures() {
-        val accessToken = AccessToken("test", "test", "test", null, null, null, null, null)
+        val accessToken = AccessToken("test", "test", "test", null, null, null, null, null, null)
         val resultList = ArrayList<FacebookPicture>()
-        resultList.add(FacebookPicture("previewUrl", "sourceUrl", 123))
-        resultList.add(FacebookPicture("previewUrl2", "sourceUrl2", 456))
+        resultList.add(FacebookPicture("previewUrl", "sourceUrl", "123"))
+        resultList.add(FacebookPicture("previewUrl2", "sourceUrl2", "456"))
         controller.facebookDataManager = dataManagerMock
         doReturn(accessToken).`when`(controller).getAccessToken()
-        `when`(dataManagerMock.requestPictures(123, accessToken)).thenReturn(Observable.just(resultList))
+        `when`(dataManagerMock.requestPictures("123", accessToken)).thenReturn(Observable.just(resultList))
 
         controller.loadPictures()
 

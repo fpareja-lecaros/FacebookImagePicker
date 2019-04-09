@@ -16,10 +16,10 @@ import kotlin.collections.ArrayList
  */
 
 const val GRAPH_PATH_ALBUMS = "me/albums"
-const val GRAPH_PATH_PHOTOS = "/%d/photos"
+const val GRAPH_PATH_PHOTOS = "/%s/photos"
 const val GRAPH_REQUEST_FIELDS = "fields"
 const val GRAPH_REQUEST_FIELD_SEPARATOR = ","
-const val FACEBOOK_PICTURE_URL = "https://graph.facebook.com/%d/picture?type=thumbnail&access_token=%s"
+const val FACEBOOK_PICTURE_URL = "https://graph.facebook.com/%s/picture?type=thumbnail&access_token=%s"
 const val RESPONSE_JSON_NAME_DATA = "data"
 const val RESPONSE_JSON_ALBUM_ID = "id"
 const val RESPONSE_JSON_ALBUM_NAME = "name"
@@ -33,7 +33,7 @@ const val RESPONSE_JSON_PICTURE_ID = "id"
 
 object FacebookDataManager {
 
-    fun requestPictures(albumId: Long, accessToken: AccessToken): Observable<List<FacebookPicture>> {
+    fun requestPictures(albumId: String, accessToken: AccessToken): Observable<List<FacebookPicture>> {
         val graphRequest = createGraphRequest(accessToken, GRAPH_PATH_PHOTOS.format(albumId), RESPONSE_JSON_PICTURE_PREVIEW, RESPONSE_JSON_PICTURE_ID, RESPONSE_JSON_IMAGES)
         return request(graphRequest).flatMap { response: GraphResponse ->
             Observable.just(convertJsonObjectToFacebookPictureList(response.jsonObject))
@@ -48,7 +48,7 @@ object FacebookDataManager {
                 val item = dataJSONArray.getJSONObject(index)
                 val images = item.getJSONArray(RESPONSE_JSON_IMAGES)
                 val image = images.getJSONObject(0) //Obtain the largest possible image from the front of the array
-                pictureList.add(FacebookPicture(item.getString(RESPONSE_JSON_PICTURE_PREVIEW), image.getString(RESPONSE_JSON_PICTURE_SOURCE), item.getLong(RESPONSE_JSON_PICTURE_ID)))
+                pictureList.add(FacebookPicture(item.getString(RESPONSE_JSON_PICTURE_PREVIEW), image.getString(RESPONSE_JSON_PICTURE_SOURCE), item.getString(RESPONSE_JSON_PICTURE_ID)))
             }
         }
         return pictureList
@@ -70,9 +70,9 @@ object FacebookDataManager {
                 val item = dataJSONArray.getJSONObject(index)
                 if (item.has(RESPONSE_JSON_COVER_PHOTO)) {
                     val photo = item.getJSONObject(RESPONSE_JSON_COVER_PHOTO)
-                    albumList.add(FacebookAlbum(item.getLong(RESPONSE_JSON_ALBUM_ID), item.getString(RESPONSE_JSON_ALBUM_NAME), item.getInt(RESPONSE_JSON_ALBUM_COUNT), photo.getLong(RESPONSE_JSON_COVER_PHOTO_ID)))
+                    albumList.add(FacebookAlbum(item.getString(RESPONSE_JSON_ALBUM_ID), item.getString(RESPONSE_JSON_ALBUM_NAME), item.getInt(RESPONSE_JSON_ALBUM_COUNT), photo.getString(RESPONSE_JSON_COVER_PHOTO_ID)))
                 } else {
-                    albumList.add(FacebookAlbum(item.getLong(RESPONSE_JSON_ALBUM_ID), item.getString(RESPONSE_JSON_ALBUM_NAME), item.getInt(RESPONSE_JSON_ALBUM_COUNT), null))
+                    albumList.add(FacebookAlbum(item.getString(RESPONSE_JSON_ALBUM_ID), item.getString(RESPONSE_JSON_ALBUM_NAME), item.getInt(RESPONSE_JSON_ALBUM_COUNT), null))
                 }
             }
         }

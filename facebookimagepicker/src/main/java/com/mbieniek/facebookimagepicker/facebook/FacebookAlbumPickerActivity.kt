@@ -15,6 +15,7 @@ import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.mbieniek.facebookimagepicker.R
 import com.mbieniek.facebookimagepicker.facebook.controllers.FacebookAlbumPickerController
+import com.mbieniek.facebookimagepicker.facebook.controllers.PERMISSION_INSTAGRAM
 import com.mbieniek.facebookimagepicker.facebook.controllers.PERMISSION_USER_PHOTOS
 import java.util.*
 
@@ -83,10 +84,10 @@ class FacebookAlbumPickerActivity : AppCompatActivity() {
         })
         // Not logged into Facebook
         if (AccessToken.getCurrentAccessToken() == null) {
-            loginManager.logInWithReadPermissions(this, Arrays.asList(PERMISSION_USER_PHOTOS))
+            loginManager.logInWithReadPermissions(this, Arrays.asList(PERMISSION_USER_PHOTOS,PERMISSION_INSTAGRAM))
         } else {
-            if (!checkUserPhotosPermission()) {
-                loginManager.logInWithReadPermissions(this, Arrays.asList(PERMISSION_USER_PHOTOS))
+            if (!checkUserPhotosPermission() && !checkUserInstagramPermission()) {
+                loginManager.logInWithReadPermissions(this, Arrays.asList(PERMISSION_USER_PHOTOS,PERMISSION_INSTAGRAM))
             } else {
                 controller.loadAlbums()
             }
@@ -100,5 +101,11 @@ class FacebookAlbumPickerActivity : AppCompatActivity() {
         return false
     }
 
+    fun checkUserInstagramPermission() : Boolean {
+        if (AccessToken.getCurrentAccessToken() != null && AccessToken.getCurrentAccessToken().permissions.contains(PERMISSION_INSTAGRAM)) {
+            return true
+        }
+        return false
+    }
 
 }
